@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="header">
+        <header>
+            <h1>Temperature Converter</h1>
+        </header>
+    </div>
+    <div class="row">
+    <div class="column side"></div>
+    <div class="column middle">
+        <section>
+            <select name="selectFrom" id="selectFrom" onchange="selectUnit()">
+                <option value="celcius">Celcius</option>
+                <option value="reamur">Reamur</option>
+                <option value="fahrenheit">Fahrenheit</option>
+                <option value="kelvin">Kelvin</option>
+            </select>
+            <span class=toText>to</span>
+            <select name="selectTo" id="selectTo" onchange="selectUnit()">
+                <option value="celcius">Celcius</option>
+                <option value="reamur">Reamur</option>
+                <option value="fahrenheit">Fahrenheit</option>
+                <option value="kelvin">Kelvin</option>
+            </select>
+        </section>
+        <input type="number" id="tempinput" placeholder="Enter the number" oninput="conversion(this.value)" onchange="conversion(this.value)"/>
+        <input type="number" id="tempresult" placeholder="Result" disabled/>
+    <div>Change background color: <input class="form-control" id="color"/>
+    <button type="button" class="btn btn-light" onclick="change()">Change</button></div>
+    </div>
+    <div class="column side"></div>
+    </div>
+</body>
+<script src="./Converter.js"></script>
+<script>
+    function validate(event){
+        var theEvent = event || window.event;
+
+        //handle paste event
+        if (theEvent.type === "paste"){
+            key = event.clipboardData.getData("text/plain");
+        }else{
+            //handle key press event
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)){
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+    function selectUnit(){
+        document.getElementById("tempinput").value = "";
+        document.getElementById("tempresult").value = "";
+    }
+
+    const convert = new Converter();
+    function conversion(){
+        if(document.getElementById("selectFrom").value == "celcius"){
+            const res = convert.fromCelcius(
+                document.getElementById("selectTo").value,
+                parseInt(document.getElementById("tempinput").value)
+            );
+            document.getElementById("tempresult").value = res;
+        }
+        if(document.getElementById("selectFrom").value == "reamur"){
+            const res = convert.fromReamur(
+                document.getElementById("selectTo").value,
+                parseInt(document.getElementById("tempinput").value)
+            );
+            document.getElementById("tempresult").value = res;
+        }
+        if(document.getElementById("selectFrom").value == "fahrenheit"){
+            const res = convert.fromFarenheit(
+                document.getElementById("selectTo").value,
+                parseInt(document.getElementById("tempinput").value)
+            );
+            document.getElementById("tempresult").value = res;
+        }
+        if(document.getElementById("selectFrom").value == "kelvin"){
+            const res = convert.fromKelvin(
+                document.getElementById("selectTo").value,
+                parseInt(document.getElementById("tempinput").value)
+            );
+            document.getElementById("tempresult").value = res;
+        }
+    }
+    function change(){
+        document.body.style.backgroundColor =
+            document.getElementById("color").value;
+    }
+</script>
+</html>
